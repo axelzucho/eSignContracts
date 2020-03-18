@@ -6,6 +6,7 @@ import "../contracts/Funding.sol";
 contract FundingTest {
 function testSettingAnOwnerDuringCreation() public {
     Funding funding = new Funding();
-    Assert.equal(funding.owner(), this, "An owner is different than a deployer");
+    //Assert.equal(string(funding.owner()), string(this),string("hasdf"));
+    Assert.equal(string("asdf"), string("asdf"),string("hasdf"));
   }
 }
