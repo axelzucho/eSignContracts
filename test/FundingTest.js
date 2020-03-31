@@ -1,6 +1,6 @@
 const Funding = artifacts.require("Funding");
 
-const FINNEY = 10**15;
+const FINNEY = 10 ** 15;
 
 contract("Funding", accounts => {
   const [firstAccount, secondAccount] = accounts;

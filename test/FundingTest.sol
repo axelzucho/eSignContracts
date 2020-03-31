@@ -1,4 +1,4 @@
-pragma solidity 0.5.16;
+pragma solidity 0.6.4;
 
 import "truffle/Assert.sol";
 import "../contracts/Funding.sol";
@@ -19,16 +19,15 @@ contract FundingTest {
   function testAcceptingDonations() public {
     Funding funding = new Funding();
     Assert.equal(funding.raised(), 0, "Initial raised amount is different than 0");
-    funding.donate.value(10 finney)();
-    funding.donate.value(20 finney)();
+    funding.donate{value: 10 finney}();
+    funding.donate{value: 20 finney}();
     Assert.equal(funding.raised(), 30 finney, "Raised amount is different than sum of donations");
   }
 
   function testTrackingDonorsBalance() public {
     Funding funding = new Funding();
-    funding.donate.value(5 finney)();
-    funding.donate.value(15 finney)();
+    funding.donate{value: 5 finney}();
+    funding.donate{value: 15 finney}();
     Assert.equal(funding.balances(address(this)), 20 finney, "Donator balance is different than sum of donations");
   }
 }
-
