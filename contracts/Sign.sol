@@ -22,12 +22,12 @@ contract Sign {
   }
 
   // Signs provided document if sender is allowed to
-  function sign(bytes memory document) public {
+  function sign(bytes memory document) public returns(bool) {
 
   }
 
   // Returns list of document signees
-  function getSignees(bytes memory document) public {
+  function getSignees(bytes memory document) public returns(address[] memory) {
 
   }
 }
