@@ -2,13 +2,29 @@ pragma solidity 0.6.4;
 
 contract Sign {
   address public owner;
-  
-  mapping(string => address[]) public signed; // Who has signed a given document
-  mapping(string => address[]) public signees; // Who is allowed to sign a given document
-  mapping(address => string[]) public owners; // What documents any given address owns
+
+  // A structure for uniquely identifying a document
+  struct Document {
+    address owner;
+    string document; // The word document is used instead of hash, because the latter is reserved
+  }
+
+  // Strcuture for indicating signees and status of signatures
+  struct Signature {
+    address signee;
+    bool isSigned;
+  }
+
+  // Registry for documents and its signatures
+  mapping(bytes32 => Signature[]) public registry;
 
   constructor() public {
     owner = msg.sender;
+  }
+
+  // Returns key, from a Document structure, to access Signatures in registry
+  function keyFromDocument(Document memory document) private pure returns (bytes32) {
+    return keccak256(abi.encode(document.owner, document.document));
   }
 
   // Creates a new entry for a hashed document, owned by sender
@@ -22,12 +38,12 @@ contract Sign {
   }
 
   // Signs provided document if sender is allowed to
-  function sign(bytes memory document) public returns(bool) {
+  function sign(address _owner, bytes memory document) public returns(bool) {
 
   }
 
   // Returns list of document signees
-  function getSignees(bytes memory document) public returns(address[] memory) {
+  function getSignees(address _owner, bytes memory document) public returns(address[] memory) {
 
   }
 }
