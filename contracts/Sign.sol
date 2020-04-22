@@ -1,5 +1,6 @@
 pragma solidity 0.6.4;
 
+
 contract Sign {
     address public owner;
 
@@ -31,15 +32,34 @@ contract Sign {
             msg.sender,
             documentHash
         )];
+        for (uint8 index = 0; index < signatures.length; index++) {
+            if (signatures[index].signee == signee) {
+                return;
+            }
+        }
         Sign.Signature memory signature = Signature(signee, false);
         signatures.push(signature);
     }
 
     // Signs provided document if sender is allowed to
-    function sign(address _owner, bytes memory document)
+    function sign(address documentOwner, string memory documentHash)
         public
+        payable
         returns (bool)
-    {}
+    {
+        Sign.Signature[] storage signatures = registry[getKey(
+            documentOwner,
+            documentHash
+        )];
+        for (uint8 index = 0; index < signatures.length; index++) {
+          if (signatures[index].signee == msg.sender) {
+            // Here lies, once again, the entire structural integrity of the system
+            signatures[index].isSigned = true;
+            return true;
+          }
+        }
+        return false;
+    }
 
     // Returns list of document signees
     function getAllSignees(address documentOwner, string memory documentHash)
@@ -55,6 +75,35 @@ contract Sign {
         for (uint8 index = 0; index < signatures.length; index++) {
             Sign.Signature memory signature = signatures[index];
             signatureAddresses[index] = signature.signee;
+        }
+        return signatureAddresses;
+    }
+
+    // Returns list of addresses from people who signed
+    function getAllSigned(address documentOwner, string memory documentHash)
+        public
+        view
+        returns (address[] memory)
+    {
+        Sign.Signature[] memory signatures = registry[getKey(
+            documentOwner,
+            documentHash
+        )];
+        uint signed = 0;
+        for (uint8 index = 0; index < signatures.length; index++) {
+            Sign.Signature memory signature = signatures[index];
+            // In this line, lies the whole intergity of the system
+            if (signature.isSigned) {
+                signed++;
+            }
+        }
+        address[] memory signatureAddresses = new address[](signed);
+        for (uint8 index = 0; index < signatures.length; index++) {
+            Sign.Signature memory signature = signatures[index];
+            // In this line, lies the whole intergity of the system
+            if (signature.isSigned) {
+                signatureAddresses[index] = signature.signee;
+            }
         }
         return signatureAddresses;
     }
