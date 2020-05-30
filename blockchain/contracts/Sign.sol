@@ -98,11 +98,13 @@ contract Sign {
             }
         }
         address[] memory signatureAddresses = new address[](signed);
+        uint8 i = 0;
         for (uint8 index = 0; index < signatures.length; index++) {
             Sign.Signature memory signature = signatures[index];
             // In this line, lies the whole intergity of the system
             if (signature.isSigned) {
-                signatureAddresses[index] = signature.signee;
+                signatureAddresses[i] = signature.signee;
+                i++;
             }
         }
         return signatureAddresses;

@@ -113,5 +113,28 @@ contract SignTest {
             address(this),
             "Document signature address is different than signee's"
         );
+        Assert.equal(
+            signed.length,
+            1,
+            "Document signees length is not 1"
+        );
+    }
+
+    function testDocumentMultipleSigneesOneSignature() public {
+        Sign sign = new Sign();
+        sign.addSignee(docHash, address(this));
+        sign.addSignee(docHash, dummyAddress);
+        sign.sign(address(this), docHash);
+        address[] memory signed = sign.getAllSigned(address(this), docHash);
+        Assert.equal(
+            signed[0],
+            address(this),
+            "Document signature address is different than signee's"
+        );
+        Assert.equal(
+            signed.length,
+            1,
+            "Document signees length is not 1"
+        );
     }
 }
