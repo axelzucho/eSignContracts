@@ -16,7 +16,6 @@ function App() {
   const [documentOwner, setDocumentOwner] = useState("");
   
   const handleUploadDocument = async (e) => {
-    console.log(documentHash, signee)
     e.preventDefault();
     const accounts = await window.ethereum.enable();
     const account = accounts[0];
